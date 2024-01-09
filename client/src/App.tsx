@@ -7,13 +7,22 @@ import {
 import SignIn from "./features/profile/SignIn";
 import SignUp from "./features/profile/SignUp";
 import Header from "./features/layouts/Header";
+import { Toaster } from "react-hot-toast";
+import NotFound from "./components/NotFound";
+import Home from "./features/pages/Home";
+import Footer from "./features/layouts/Footer";
 
 const App = () => {
   return (
     <>
       <Router>
+        <Toaster position="top-center" reverseOrder={true} />
         <Routes>
-          {/* <Route path="/" element={<LayoutsWithHeader />} /> */}
+          <Route path="/" element={<LayoutsWithHeader />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
         </Routes>
@@ -28,7 +37,7 @@ const LayoutsWithHeader = () => {
     <>
       <Header />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

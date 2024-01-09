@@ -20,11 +20,11 @@ exports.signup = async (req, res) => {
       email: email,
       password: bcrypt.hashSync(password, 8),
     });
-    res
+    return res
       .status(200)
       .send({ success: true, message: "User registered successfully!" });
   } catch (error) {
-    res.status(500).send({ success: false, message: error.message });
+    return res.status(500).send({ success: false, message: error.message });
   }
 };
 

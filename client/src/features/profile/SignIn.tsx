@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User, loginUser } from "./services/profileService";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<User>({
     email: "",
     password: "",
   });
@@ -18,18 +20,36 @@ const Login = () => {
     }));
   };
 
+  const handleSubmit = () => {
+    setLoading(true);
+    loginUser(formData)
+      .then((res) => {
+        if (res.success && res.authToken && res.data) {
+          toast.success(res.message);
+          localStorage.setItem("authToken", res.authToken);
+          navigate("/home");
+        } else toast.error(res.message);
+      })
+      .catch((err) => {
+        if (!err?.message)
+          toast.error("Something Went Wrong! Please try after sometime");
+        else toast.error(err.message);
+      })
+      .finally(() => setLoading(false));
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign In
+              Sign in to our platform
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form className="space-y-4 md:space-y-6">
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Email
+                  Your email
                 </label>
                 <input
                   type="email"
@@ -44,7 +64,7 @@ const Login = () => {
               </div>
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Password
+                  Your password
                 </label>
                 <input
                   type={"password"}
@@ -77,10 +97,11 @@ const Login = () => {
                 </a>
               </div>
               <button
-                type="submit"
+                onClick={handleSubmit}
+                disabled={loading}
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Sign In
+                Login in to your account
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
@@ -88,7 +109,7 @@ const Login = () => {
                   onClick={() => navigate("/register")}
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer"
                 >
-                  Sign Up
+                  Create Account
                 </a>
               </p>
             </form>

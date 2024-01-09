@@ -1,13 +1,14 @@
 const Footer = () => {
   return (
-    <div>
-      <div className="max-w-[1000px] w-full border-b-[rgba(0,_0,_0,_0.2)_solid_1px] mx-[auto] my-[0] items-center"></div>
-      <div className="justify-between items-center h-[50px] p-[10px]">
-        <p className="text-[18px] text-[rgb(0,_0,_0)] text-center m-0">
-          © 2022 Gilbert Hutapea. All Rights Reserved
-        </p>
+    <footer className="bg-white rounded-lg shadow dark:bg-gray-900">
+      <div className="w-full max-w-screen-xl mx-auto md:py-4">
+        <hr className="w-full my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          © 2023 <a className="hover:underline">Blogger™</a>. All Rights
+          Reserved.
+        </span>
       </div>
-    </div>
+    </footer>
   );
 };
 
