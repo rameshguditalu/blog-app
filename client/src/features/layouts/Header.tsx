@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-// import SearchForm from "./SearchForm";
-// import SkeletonElement from "../Skeletons/SkeletonElement";
-// import { AuthContext } from "../../Context/AuthContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/blog-logo.png";
+import BellIcon from "../../assets/svg/bell-regular.svg";
+
 const Header = () => {
   const bool = localStorage.getItem("authToken") ? true : false;
   const [auth, setAuth] = useState(bool);
-  // const { activeUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -17,10 +15,13 @@ const Header = () => {
   };
 
   return (
-    <header>
+    <header className="fixed top-0 w-full z-50 bg-white border-b dark:bg-gray-900">
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="flex flex-wrap items-center justify-between p-4">
-          <a className="flex items-center space-x-3 rtl:space-x-reverse">
+          <a
+            className="cursor-pointer flex items-center space-x-3 rtl:space-x-reverse"
+            onClick={() => navigate("/home")}
+          >
             <img src={Logo} className="h-8" alt="Blogger Logo" />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               Blogger
@@ -28,7 +29,7 @@ const Header = () => {
           </a>
 
           <div className="flex items-center lg:order-2">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 items-center">
               <li>
                 <div className="flex md:order-2">
                   <div className="relative hidden md:block">
@@ -86,7 +87,7 @@ const Header = () => {
               <li>
                 <a
                   onClick={() => {
-                    if (auth) navigate("/add-story");
+                    if (auth) navigate("/new-story");
                     else navigate("/login");
                   }}
                   className="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white cursor-pointer"
@@ -94,6 +95,9 @@ const Header = () => {
                 >
                   {auth ? "Add Story" : "Log In"}
                 </a>
+              </li>
+              <li className="cursor-pointer hover:blue">
+                <img src={BellIcon} alt="" />
               </li>
               <li>
                 <a
@@ -110,6 +114,7 @@ const Header = () => {
           </div>
         </div>
       </nav>
+      <hr className="w-full my-4 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-0" />
     </header>
   );
 };

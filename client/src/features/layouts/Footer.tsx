@@ -1,9 +1,9 @@
 const Footer = () => {
   return (
-    <footer className="bg-white rounded-lg shadow dark:bg-gray-900">
-      <div className="w-full max-w-screen-xl mx-auto md:py-4">
-        <hr className="w-full my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
+    <footer className="w-full fixed bottom-0 bg-white rounded-lg shadow dark:bg-gray-900">
+      <div className="w-full max-w-screen-2xl mx-auto h-14">
+        <hr className="w-full border-gray-200 sm:mx-auto dark:border-gray-700" />
+        <span className="block text-sm sm:items-center sm:text-center text-gray-500 my-4">
           © 2023 <a className="hover:underline">Blogger™</a>. All Rights
           Reserved.
         </span>

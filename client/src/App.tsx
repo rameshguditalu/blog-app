@@ -11,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 import NotFound from "./components/NotFound";
 import Home from "./features/pages/Home";
 import Footer from "./features/layouts/Footer";
+import AddStory from "./features/pages/AddStory";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/" element={<LayoutsWithHeader />}>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/new-story" element={<AddStory />} />
             <Route path="*" element={<NotFound />} />
           </Route>
           <Route path="/login" element={<SignIn />} />
