@@ -5,9 +5,17 @@ const UserSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    //   lastName: { type: String, required: true },
-    //   bio: { type: String, required: true },
-    //   userName: { type: String, required: true, unique: true },
+    userName: { type: String, required: true, unique: true },
+    bio: {
+      type: String,
+      required: false,
+      maxlength: [200, "Bio should not be more than 200"],
+      default: "",
+    },
+    profileImg: {
+      type: String,
+      required: false,
+    },
     password: { type: String, required: true },
   },
   {

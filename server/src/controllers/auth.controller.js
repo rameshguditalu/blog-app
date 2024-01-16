@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const getAuth = require("firebase-admin/auth");
 
 exports.signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -14,15 +15,23 @@ exports.signup = async (req, res) => {
         message: "User already exists with this email",
       });
     }
-
-    await User.create({
+    let userName = email.split("@")[0];
+    let newUser = await User.create({
       name: name,
       email: email,
+      userName: userName,
       password: bcrypt.hashSync(password, 8),
     });
-    return res
-      .status(200)
-      .send({ success: true, message: "User registered successfully!" });
+    return res.status(200).send({
+      success: true,
+      message: "User registered successfully!",
+      data: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        userName: newUser.userName,
+      },
+    });
   } catch (error) {
     return res.status(500).send({ success: false, message: error.message });
   }
@@ -58,4 +67,19 @@ exports.signin = async (req, res) => {
   } catch (error) {
     return res.status(500).send({ success: false, message: error.message });
   }
+};
+
+exports.googleAuth = async (req, res) => {
+  let { access_token } = req.body;
+  getAuth.verifyIdToken(access_token).then(async (decodedUser) => {
+    let { email, name, picture } = decodedUser;
+    picture = picture.replace("s96-c", "s384-c");
+    let user = await User.findOne({
+      email: email,
+    })
+      .select()
+      .then((u) => {
+        return u || null;
+      });
+  });
 };

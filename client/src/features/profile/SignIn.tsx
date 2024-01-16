@@ -1,32 +1,40 @@
+import InputBox from "../../components/InputBox";
+import googleIcon from "../../assets/google.png";
+import { Link, useNavigate } from "react-router-dom";
+import AnimationWrapper from "../../components/PageAnimation";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { User, loginUser } from "./services/profileService";
 import toast from "react-hot-toast";
+import { setActiveProfile, setAuthToken } from "./profileSlice";
+import { useDispatch } from "react-redux";
+import { authWithGoogle } from "./firebase";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<User>({
     email: "",
     password: "",
   });
   const { email, password } = formData;
 
-  const handlChange = (e: { target: { id: any; value: any } }) => {
+  const handlChange = (e: { target: { name: any; value: any } }) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.id]: e.target.value,
+      [e.target.name]: e.target.value,
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     setLoading(true);
     loginUser(formData)
       .then((res) => {
         if (res.success && res.authToken && res.data) {
           toast.success(res.message);
-          localStorage.setItem("authToken", res.authToken);
+          dispatch(setAuthToken({ value: res.authToken }));
+          dispatch(setActiveProfile({ profile: res.data }));
           navigate("/home");
         } else toast.error(res.message);
       })
@@ -38,85 +46,60 @@ const Login = () => {
       .finally(() => setLoading(false));
   };
 
+  const handleGoogleAuth = (e: any) => {
+    e.preventDefault();
+    authWithGoogle()
+      .then((user) => console.log(user))
+      .catch(() => toast.error("trouble login through google"));
+  };
+
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign in to our platform
-            </h1>
-            <form className="space-y-4 md:space-y-6">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Enter your email address"
-                  required={true}
-                  value={email}
-                  onChange={handlChange}
-                />
-              </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Your password
-                </label>
-                <input
-                  type={"password"}
-                  name="password"
-                  id="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required={true}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={handlChange}
-                />
-                {/* {showPassword ? (
-                  <AiFillEyeInvisible
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-12 text-xl cursor-pointer"
-                  />
-                ) : (
-                  <AiFillEye
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-12 text-xl cursor-pointer"
-                  />
-                )} */}
-              </div>
-              <div className="flex items-end">
-                <a
-                  href="#"
-                  className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500 justify-center"
-                >
-                  Forgot password?
-                </a>
-              </div>
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
-                Login in to your account
-              </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don’t have an account yet?{" "}
-                <a
-                  onClick={() => navigate("/register")}
-                  className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer"
-                >
-                  Create Account
-                </a>
-              </p>
-            </form>
+    <AnimationWrapper keyValue={"Login"}>
+      <section className="h-cover flex items-center justify-center">
+        <form className="w-[80%] max-w-[400px]">
+          <h1 className="text-4xl font-gelasio capitalize text-center mb-14">
+            Welcome back
+          </h1>
+          <InputBox
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={email || ""}
+            handleChange={handlChange}
+            icon="fi-sr-envelope"
+          />
+          <InputBox
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={password ?? ""}
+            handleChange={handlChange}
+            icon="fi-sr-lock"
+          />
+          <button className="btn-dark center mt-5" onClick={handleSubmit}>
+            Sign In
+          </button>
+          <div className="relative w-full flex items-center gap-2 my-5 opacity-10 uppercase text-black font-bold">
+            <hr className="w-1/2 border-black" />
+            <p>or</p>
+            <hr className="w-1/2 border-black" />
           </div>
-        </div>
-      </div>
-    </section>
+          <button
+            className="btn-dark flex items-center justify-center gap-4 w-[80%] center"
+            onClick={handleGoogleAuth}
+          >
+            <img src={googleIcon} className="w-5" alt="google" />
+            Continue with google
+          </button>
+          <p className="mt-2 text-dark-grey text-l text-center">
+            Don't have an account ?
+            <Link to="/register" className="underline text-black text-l ml-1">
+              Join us today
+            </Link>
+          </p>
+        </form>
+      </section>
+    </AnimationWrapper>
   );
 };
 

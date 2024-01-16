@@ -2,9 +2,11 @@ import axios from "axios";
 
 export type User = {
   id?: string;
-  name?: string;
   email?: string;
+  userName?: string;
+  fullName?: string;
   password?: string;
+  profileImage?: string;
 };
 
 export type AxiosResponse = {
@@ -19,7 +21,7 @@ export function registerUser(formData: User): Promise<AxiosResponse> {
     axios
       .post("http://localhost:8080/api/user/register", {
         email: formData.email,
-        name: formData.name,
+        name: formData.fullName,
         password: formData.password,
       })
       .then((response) => {

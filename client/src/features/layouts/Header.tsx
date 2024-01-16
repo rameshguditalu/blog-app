@@ -1,121 +1,94 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../assets/blog-logo.png";
-import BellIcon from "../../assets/svg/bell-regular.svg";
+import { useSelector } from "react-redux";
+import { profileState } from "../profile/profileSlice";
+import ProfileIcon from "../../assets/user.png";
+import UserNavigation from "../../components/UserNavigation";
 
 const Header = () => {
-  const bool = localStorage.getItem("authToken") ? true : false;
-  const [auth, setAuth] = useState(bool);
+  const authToken = useSelector(profileState).authToken;
+  const profile = useSelector(profileState).profile;
+
+  const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
+  const [userNav, setUserNav] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    setAuth(false);
-    navigate("/");
+  const handleBlur = () => {
+    setTimeout(() => {
+      setUserNav(false);
+    }, 200);
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-white border-b dark:bg-gray-900">
-      <nav className="bg-white border-gray-200 dark:bg-gray-900">
-        <div className="flex flex-wrap items-center justify-between p-4">
-          <a
-            className="cursor-pointer flex items-center space-x-3 rtl:space-x-reverse"
-            onClick={() => navigate("/home")}
-          >
-            <img src={Logo} className="h-8" alt="Blogger Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-              Blogger
-            </span>
-          </a>
+    <nav className="navbar">
+      <Link to="/" className="flex-none w-10">
+        <img src={Logo} alt="Blogger Logo" />
+      </Link>
+      <div
+        className={
+          "absolute bg-white w-full left-0 top-full mt-0.5 border-b border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show " +
+          (searchBoxVisibility ? "show" : "hide")
+        }
+      >
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full md:w-auto bg-grey p-3 pl-6 pr-[12%] md:pr-6 rounded-full placeholder:text-dark-grey md:pl-12"
+        />
+        <i className="fi fi-rr-search absolute right-[10%] md:pointer-events-none md:left-5 top-1/2 -translate-y-1/2 text-xl text-dark-grey"></i>
+      </div>
+      <div className="flex items-center gap-3 md:gap-6 ml-auto">
+        <button
+          className="md:hidden bg-grey w-12 h-12 rounded-full flex items-center justify-center"
+          onClick={() => setSearchBoxVisibility((curr) => !curr)}
+        >
+          <i className="fi fi-rr-search text-xl"></i>
+        </button>
 
-          <div className="flex items-center lg:order-2">
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0 items-center">
-              <li>
-                <div className="flex md:order-2">
-                  <div className="relative hidden md:block">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                      </svg>
-                      <span className="sr-only">Search icon</span>
-                    </div>
-                    <input
-                      type="text"
-                      id="search-navbar"
-                      className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Search..."
-                    />
-                  </div>
-                  <button
-                    data-collapse-toggle="navbar-search"
-                    type="button"
-                    className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                    aria-controls="navbar-search"
-                    aria-expanded="false"
-                  >
-                    <span className="sr-only">Open main menu</span>
-                    <svg
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 17 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M1 1h15M1 7h15M1 13h15"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </li>
-              <li>
-                <a
-                  onClick={() => {
-                    if (auth) navigate("/new-story");
-                    else navigate("/login");
-                  }}
-                  className="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white cursor-pointer"
-                  aria-current="page"
-                >
-                  {auth ? "Add Story" : "Log In"}
-                </a>
-              </li>
-              <li className="cursor-pointer hover:blue">
-                <img src={BellIcon} alt="" />
-              </li>
-              <li>
-                <a
-                  onClick={() => {
-                    if (auth) handleLogout();
-                    else navigate("/register");
-                  }}
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700 cursor-pointer"
-                >
-                  {auth ? "Logout" : "Get Started"}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <hr className="w-full my-4 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-0" />
-    </header>
+        <Link to="/add-story" className="hidden md:flex gap-2 link bg-none">
+          <i className="fi fi-rr-file-edit"></i>
+          <p>Write</p>
+        </Link>
+        {authToken && (
+          <>
+            <Link to="/dashboard/notification">
+              <button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10">
+                <i className="fi fi-rr-bell text-2xl block mt-1"></i>
+              </button>
+            </Link>
+            <div
+              className="relative"
+              onClick={() => setUserNav((curr) => !curr)}
+              onBlur={handleBlur}
+            >
+              <button className="w-12 h-12 mt-1">
+                {profile.profileImage ? (
+                  <img
+                    src={ProfileIcon}
+                    className="w-8 h-8 object-cover rounded-full"
+                    alt="profile"
+                  />
+                ) : (
+                  <i className="fi fi-sr-user text-2xl block mt-1"></i>
+                )}
+              </button>
+              {userNav ? <UserNavigation /> : ""}
+            </div>
+          </>
+        )}
+        {!authToken && (
+          <>
+            <Link to="/login" className="btn-dark py-2">
+              Sign In
+            </Link>
+            <Link to="/register" className="btn-light hidden md:block py-2">
+              Get Started
+            </Link>
+          </>
+        )}
+      </div>
+    </nav>
   );
 };
 

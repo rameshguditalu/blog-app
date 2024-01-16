@@ -4,10 +4,15 @@ require("dotenv").config();
 require("./config/db.config");
 const apiServices = require("./routes/auth.routes");
 const app = express();
+const admin = require("firebase-admin");
+const serviceAccountKey = require("./config/blog-app-d8259-firebase-adminsdk-lvfh5-6e03a5bc98.json");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true }));
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccountKey),
+});
 
 apiServices.routes(app);
 const PORT = process.env.PORT || 8080;

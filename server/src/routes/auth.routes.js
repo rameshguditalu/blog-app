@@ -9,6 +9,7 @@ exports.routes = (app) => {
   app.post("/api/user/register", controller.signup);
 
   app.post("/api/user/login", controller.signin);
+  app.post("/api/user/google-auth", controller.googleAuth);
 
   //   app.post("/api/auth/signout", controller.signout);
 };
