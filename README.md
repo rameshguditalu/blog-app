@@ -1,5 +1,6 @@
-This website features include -
+# Fullstack MERN Blogging Website
 
+This website features include -
 1. Modern Blog Editor using Editor JS.
 2. Google Authentication for Users
 3. Dynamic Blog Pages on dynamic urls.
@@ -9,5 +10,6 @@ This website features include -
 7. Blog Post Analytics, editable and deletable.
 8. Recent notification highlight separating them from old notifications.
 9. Edit profile option to update social links, bio and username
-10. Also user can change login password from settings.
-11. Its mobile responsive with modern design + fade in animation on pages. And much more
+11. Also user can change login password from settings.
+12. Its mobile responsive with modern design + fade in animation on pages.
+And much more.
