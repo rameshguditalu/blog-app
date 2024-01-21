@@ -14,7 +14,7 @@ const initialData: OutputData = {
 };
 
 const AddStory = () => {
-  const profileData = useSelector(profileState).profile;
+  const profileData = useSelector(profileState).profile.personal_info;
   const isEditorState = useSelector(blogEditorState).isEditorState;
   const [editorData, setEditorData] = useState(initialData);
 

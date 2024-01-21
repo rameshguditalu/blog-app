@@ -1,43 +1,44 @@
 import axios from "axios";
 
-export type User = {
-  id?: string;
-  email?: string;
-  userName?: string;
-  fullName?: string;
-  password?: string;
-  profileImage?: string;
+export type UserAccount = {
+  personal_info: {
+    id?: string;
+    email?: string;
+    userName?: string;
+    fullName?: string;
+    password?: string;
+    profileImage?: string;
+  };
 };
 
 export type AxiosResponse = {
   success: boolean;
   message: string;
   authToken?: string;
-  data?: User;
+  data?: UserAccount;
 };
 
-export function registerUser(formData: User): Promise<AxiosResponse> {
+export function registerUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
       .post("http://localhost:8080/api/user/register", {
-        email: formData.email,
-        fullName: formData.fullName,
-        password: formData.password,
+        email: formData.personal_info.email,
+        fullName: formData.personal_info.fullName,
+        password: formData.personal_info.password,
       })
       .then((response) => {
-        console.log("here");
         resolve(response.data);
       })
       .catch((err) => reject(err));
   });
 }
 
-export function loginUser(formData: User): Promise<AxiosResponse> {
+export function loginUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
       .post("http://localhost:8080/api/user/login", {
-        email: formData.email,
-        password: formData.password,
+        email: formData.personal_info.email,
+        password: formData.personal_info.password,
       })
       .then((response) => {
         resolve(response.data);

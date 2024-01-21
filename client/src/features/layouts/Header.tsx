@@ -15,8 +15,10 @@ import toast from "react-hot-toast";
 const Header = () => {
   const authToken = useSelector(profileState).authToken;
   const editorData = useSelector(blogEditorState).blogState;
+  const isEditorState = useSelector(blogEditorState).isEditorState;
+
   const dispatch = useDispatch();
-  const profileData = useSelector(profileState).profile;
+  const profileData = useSelector(profileState).profile.personal_info;
   const pathName = useLocation().pathname;
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
   const [userNav, setUserNav] = useState(false);
@@ -73,9 +75,11 @@ const Header = () => {
 
         {pathName == AppRoutePaths.NEW_STORY && authToken && (
           <>
-            <button className="btn-dark py-2" onClick={handlePublishEvent}>
-              Publish
-            </button>
+            {isEditorState && (
+              <button className="btn-dark py-2" onClick={handlePublishEvent}>
+                Publish
+              </button>
+            )}
             <button className="btn-light hidden md:block py-2">
               Save Draft
             </button>

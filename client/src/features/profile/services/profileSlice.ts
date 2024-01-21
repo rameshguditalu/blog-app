@@ -1,12 +1,15 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import { User } from "./profileService";
+import { UserAccount } from "./profileService";
 import { RootState } from "../../../app/rootReducer";
 
-const initialState: { profile: User; authToken: string } = {
+const initialState: { profile: UserAccount; authToken: string } = {
   profile: {
-    id: "",
-    fullName: "",
-    email: "",
+    personal_info: {
+      id: "",
+      fullName: "",
+      email: "",
+      userName: "",
+    },
   },
   authToken: "",
 };
@@ -20,10 +23,22 @@ export const profileSlice = createSlice({
     },
     logout: (state) => {
       state.authToken = "";
-      state.profile = {};
+      state.profile.personal_info = {};
     },
-    setActiveProfile: (state, action: PayloadAction<{ profile: User }>) => {
-      state.profile = { ...state.profile, ...action.payload.profile };
+    setActiveProfile: (
+      state,
+      action: PayloadAction<{ profile: UserAccount }>
+    ) => {
+      if (action.payload.profile.personal_info) {
+        state.profile.personal_info.id =
+          action.payload.profile.personal_info.id;
+        state.profile.personal_info.email =
+          action.payload.profile.personal_info.email;
+        state.profile.personal_info.fullName =
+          action.payload.profile.personal_info.fullName;
+        state.profile.personal_info.userName =
+          action.payload.profile.personal_info.userName;
+      }
     },
   },
 });

@@ -1,5 +1,5 @@
 import { OutputData } from "@editorjs/editorjs";
-import { User } from "../../../profile/services/profileService";
+import { UserAccount } from "../../../profile/services/profileService";
 
 export type BlogType = {
   title: string;
@@ -7,5 +7,5 @@ export type BlogType = {
   content: OutputData;
   tags: string[];
   description: string;
-  author: User;
+  author: UserAccount;
 };

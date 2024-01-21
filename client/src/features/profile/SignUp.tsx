@@ -3,23 +3,28 @@ import googleIcon from "../../assets/google.png";
 import { Link, useNavigate } from "react-router-dom";
 import AnimationWrapper from "../../common/components/PageAnimation";
 import { useState } from "react";
-import { User, registerUser } from "./services/profileService";
+import { UserAccount, registerUser } from "./services/profileService";
 import toast from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<User>({
-    fullName: "",
-    email: "",
-    password: "",
+  const [formData, setFormData] = useState<UserAccount>({
+    personal_info: {
+      fullName: "",
+      email: "",
+      password: "",
+    },
   });
-  const { fullName, email, password } = formData;
+  const { fullName, email, password } = formData.personal_info;
 
   const handlChange = (e: { target: { name: any; value: any } }) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      personal_info: {
+        ...prev.personal_info,
+        [e.target.name]: e.target.value,
+      },
     }));
   };
 
