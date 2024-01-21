@@ -8,10 +8,10 @@ import SignIn from "../features/profile/SignIn";
 import SignUp from "../features/profile/SignUp";
 import Header from "../features/layouts/Header";
 import { Toaster } from "react-hot-toast";
-import NotFound from "../components/NotFound";
-import Home from "../features/pages/Home";
+import NotFound from "../common/components/NotFound";
 import Footer from "../features/layouts/Footer";
-import AddStory from "../features/pages/AddStory";
+import AddStory from "../features/pages/addStory/AddStory";
+import { AppRoutePaths } from "../common/model/route.model";
 
 const App = () => {
   return (
@@ -19,13 +19,12 @@ const App = () => {
       <Router>
         <Toaster position="top-center" reverseOrder={true} />
         <Routes>
-          <Route path="/" element={<LayoutsWithHeader />}>
-            <Route path="/login" element={<SignIn />} />
-            <Route path="/register" element={<SignUp />} />
-            {/* <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/new-story" element={<AddStory />} /> */}
-            <Route path="*" element={<NotFound />} />
+          <Route path={AppRoutePaths.LANDING} element={<LayoutsWithHeader />}>
+            <Route path={AppRoutePaths.LOGIN} element={<SignIn />} />
+            <Route path={AppRoutePaths.REGISTER} element={<SignUp />} />
+
+            <Route path={AppRoutePaths.NEW_STORY} element={<AddStory />} />
+            <Route path={AppRoutePaths.NOT_FOUND} element={<NotFound />} />
           </Route>
         </Routes>
       </Router>
@@ -38,7 +37,9 @@ const LayoutsWithHeader = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <div className="min-h-screen overflow-auto">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

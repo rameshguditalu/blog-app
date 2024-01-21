@@ -1,6 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import { User } from "./services/profileService";
-import { RootState } from "../../app/rootReducer";
+import { User } from "./profileService";
+import { RootState } from "../../../app/rootReducer";
 
 const initialState: { profile: User; authToken: string } = {
   profile: {
@@ -20,13 +20,10 @@ export const profileSlice = createSlice({
     },
     logout: (state) => {
       state.authToken = "";
+      state.profile = {};
     },
     setActiveProfile: (state, action: PayloadAction<{ profile: User }>) => {
-      state.profile.id = action.payload.profile.id;
-      state.profile.email = action.payload.profile.email;
-      state.profile.userName = action.payload.profile.userName;
-      state.profile.fullName = action.payload.profile.fullName;
-      state.profile.profileImage = action.payload.profile.profileImage;
+      state.profile = { ...state.profile, ...action.payload.profile };
     },
   },
 });

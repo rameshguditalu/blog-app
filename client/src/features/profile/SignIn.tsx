@@ -1,15 +1,21 @@
-import InputBox from "../../components/InputBox";
+import InputBox from "../../common/components/InputBox";
 import googleIcon from "../../assets/google.png";
 import { Link, useNavigate } from "react-router-dom";
-import AnimationWrapper from "../../components/PageAnimation";
+import AnimationWrapper from "../../common/components/PageAnimation";
 import { useState } from "react";
 import { User, loginUser } from "./services/profileService";
 import toast from "react-hot-toast";
-import { setActiveProfile, setAuthToken } from "./profileSlice";
-import { useDispatch } from "react-redux";
+import {
+  profileState,
+  setActiveProfile,
+  setAuthToken,
+} from "./services/profileSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { authWithGoogle } from "./firebase";
+import axios from "axios";
 
 const Login = () => {
+  const authToken = useSelector(profileState).authToken;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -49,8 +55,12 @@ const Login = () => {
   const handleGoogleAuth = (e: any) => {
     e.preventDefault();
     authWithGoogle()
-      .then((user) => console.log(user))
-      .catch(() => toast.error("trouble login through google"));
+      .then((user) =>
+        axios.post("http://localhost:8080/api/user/google-auth", { authToken })
+      )
+      .catch(() =>
+        toast.error("Trouble login through google. Please try after sometime")
+      );
   };
 
   return (

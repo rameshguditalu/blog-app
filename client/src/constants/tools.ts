@@ -26,13 +26,25 @@ import Delimiter from "@editorjs/delimiter";
 export const EditorTools = {
   paragraph: Paragraph,
   embed: Embed,
-  list: List,
+  list: {
+    class: List,
+    inlineToolbar: true,
+  },
   code: Code,
   linkTool: LinkTool,
-  image: Image,
   raw: Raw,
-  header: Header,
-  quote: Quote,
+  header: {
+    class: Header,
+    config: {
+      placeholder: "Type Heading...",
+      levels: [1, 2, 3],
+      defaultLevel: 1,
+    },
+  },
+  quote: {
+    class: Quote,
+    inlineToolbar: true,
+  },
   marker: Marker,
   checklist: CheckList,
   delimiter: Delimiter,

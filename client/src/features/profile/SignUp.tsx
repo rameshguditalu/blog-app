@@ -1,7 +1,7 @@
-import InputBox from "../../components/InputBox";
+import InputBox from "../../common/components/InputBox";
 import googleIcon from "../../assets/google.png";
 import { Link, useNavigate } from "react-router-dom";
-import AnimationWrapper from "../../components/PageAnimation";
+import AnimationWrapper from "../../common/components/PageAnimation";
 import { useState } from "react";
 import { User, registerUser } from "./services/profileService";
 import toast from "react-hot-toast";

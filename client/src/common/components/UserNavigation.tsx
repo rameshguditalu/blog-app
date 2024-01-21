@@ -1,7 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import AnimationWrapper from "./PageAnimation";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, profileState } from "../features/profile/profileSlice";
+import {
+  logout,
+  profileState,
+} from "../../features/profile/services/profileSlice";
+import { AppRoutePaths } from "../model/route.model";
 
 const UserNavigation = () => {
   const dispatch = useDispatch();
@@ -11,13 +15,17 @@ const UserNavigation = () => {
     dispatch(logout());
     navigate("/");
   };
+
   return (
     <AnimationWrapper
-      className="absolute right-0 z-50"
+      className="absolute right-0 z-50 mt-3"
       transition={{ duration: 0.2 }}
     >
       <div className="bg-white absolute right-0 border border-grey w-60 duration-200">
-        <Link to="/add-story" className="flex gap-2 link md:hidden pl-8 py-4">
+        <Link
+          to={AppRoutePaths.NEW_STORY}
+          className="flex gap-2 link md:hidden pl-8 py-4"
+        >
           <i className="fi fi-rr-file-edit"></i>
           <p>Write</p>
         </Link>

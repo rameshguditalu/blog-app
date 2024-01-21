@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/blog-logo.png";
-import { useSelector } from "react-redux";
-import { profileState } from "../profile/profileSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { profileState } from "../profile/services/profileSlice";
 import ProfileIcon from "../../assets/user.png";
-import UserNavigation from "../../components/UserNavigation";
+import UserNavigation from "../../common/components/UserNavigation";
+import { AppRoutePaths } from "../../common/model/route.model";
+import { setIsEditorState } from "../pages/addStory/services/blogEditorSlice";
 
 const Header = () => {
   const authToken = useSelector(profileState).authToken;
-  const profile = useSelector(profileState).profile;
-
+  const dispatch = useDispatch();
+  const profileData = useSelector(profileState).profile;
+  const pathName = useLocation().pathname;
   const [searchBoxVisibility, setSearchBoxVisibility] = useState(false);
   const [userNav, setUserNav] = useState(false);
   const navigate = useNavigate();
@@ -18,6 +21,10 @@ const Header = () => {
     setTimeout(() => {
       setUserNav(false);
     }, 200);
+  };
+
+  const handlePublishEvent = () => {
+    dispatch(setIsEditorState({ value: true }));
   };
 
   return (
@@ -45,11 +52,27 @@ const Header = () => {
         >
           <i className="fi fi-rr-search text-xl"></i>
         </button>
+        {pathName != AppRoutePaths.NEW_STORY && authToken && (
+          <Link
+            to={AppRoutePaths.NEW_STORY}
+            className="hidden md:flex gap-2 link bg-none"
+          >
+            <i className="fi fi-rr-file-edit"></i>
+            <p>Write</p>
+          </Link>
+        )}
 
-        <Link to="/add-story" className="hidden md:flex gap-2 link bg-none">
-          <i className="fi fi-rr-file-edit"></i>
-          <p>Write</p>
-        </Link>
+        {pathName == AppRoutePaths.NEW_STORY && authToken && (
+          <>
+            <button className="btn-dark py-2" onClick={handlePublishEvent}>
+              Publish
+            </button>
+            <button className="btn-light hidden md:block py-2">
+              Save Draft
+            </button>
+          </>
+        )}
+
         {authToken && (
           <>
             <Link to="/dashboard/notification">
@@ -63,7 +86,7 @@ const Header = () => {
               onBlur={handleBlur}
             >
               <button className="w-12 h-12 mt-1">
-                {profile.profileImage ? (
+                {profileData.profileImage ? (
                   <img
                     src={ProfileIcon}
                     className="w-8 h-8 object-cover rounded-full"

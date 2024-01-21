@@ -21,7 +21,7 @@ export function registerUser(formData: User): Promise<AxiosResponse> {
     axios
       .post("http://localhost:8080/api/user/register", {
         email: formData.email,
-        name: formData.fullName,
+        fullName: formData.fullName,
         password: formData.password,
       })
       .then((response) => {

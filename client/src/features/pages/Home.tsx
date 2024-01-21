@@ -2,9 +2,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import Pagination from "../../components/Pagination";
-import Skeleton from "../../components/Skeleton";
+import Card from "../../common/components/Card";
+import Pagination from "../../common/components/Pagination";
+import Skeleton from "../../common/components/Skeleton";
 
 const Home = () => {
   const search = useLocation().search;
