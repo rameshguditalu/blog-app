@@ -6,10 +6,15 @@ import { profileState } from "../profile/services/profileSlice";
 import ProfileIcon from "../../assets/user.png";
 import UserNavigation from "../../common/components/UserNavigation";
 import { AppRoutePaths } from "../../common/model/route.model";
-import { setIsEditorState } from "../pages/addStory/services/blogEditorSlice";
+import {
+  blogEditorState,
+  setIsEditorState,
+} from "../pages/addStory/services/blogEditorSlice";
+import toast from "react-hot-toast";
 
 const Header = () => {
   const authToken = useSelector(profileState).authToken;
+  const editorData = useSelector(blogEditorState).blogState;
   const dispatch = useDispatch();
   const profileData = useSelector(profileState).profile;
   const pathName = useLocation().pathname;
@@ -24,7 +29,11 @@ const Header = () => {
   };
 
   const handlePublishEvent = () => {
-    dispatch(setIsEditorState({ value: true }));
+    if (!editorData.image.length)
+      return toast.error("Upload an image to publish it");
+    if (!editorData.title.length)
+      return toast.error("Write blog title to publish it");
+    dispatch(setIsEditorState({ value: false }));
   };
 
   return (

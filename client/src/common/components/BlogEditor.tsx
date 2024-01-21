@@ -114,6 +114,7 @@ const BlogEditor = ({ editorData, setEditorData }: props) => {
               className="text-4xl font-medium w-full h-20 outline-none resize-none mt-10 leading-tight placeholder:opacity-40"
               onKeyDown={handleTitleKeyDown}
               onChange={handleTitleChange}
+              value={blogData.title}
             ></textarea>
             <hr className="w-full opacity-10 my-5" />
             <div id="textEditor" className="font-gelasio"></div>

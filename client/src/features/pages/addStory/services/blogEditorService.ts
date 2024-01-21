@@ -5,7 +5,7 @@ export type BlogType = {
   title: string;
   image: string;
   content: OutputData;
-  tags: string;
+  tags: string[];
   description: string;
   author: User;
 };

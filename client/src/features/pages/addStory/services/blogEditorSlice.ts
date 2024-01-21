@@ -13,7 +13,7 @@ const initialState: {
       time: new Date().getTime(),
       blocks: [],
     },
-    tags: "",
+    tags: [],
     description: "",
     author: {},
   },
