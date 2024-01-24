@@ -10,9 +10,9 @@ const serviceAccountKey = require("./config/blog-app-d8259-firebase-adminsdk-lvf
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true }));
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccountKey),
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccountKey),
+// });
 
 apiServices.routes(app);
 const PORT = process.env.PORT || 8080;

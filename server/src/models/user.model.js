@@ -3,20 +3,36 @@ const { Schema, model } = mongoose;
 
 const UserSchema = new Schema(
   {
-    email: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    userName: { type: String, required: true, unique: true },
-    bio: {
-      type: String,
-      required: false,
-      maxlength: [200, "Bio should not be more than 200"],
-      default: "",
+    personal_info: {
+      email: { type: String, required: true, unique: true },
+      fullName: { type: String, required: true },
+      password: { type: String, required: true },
+      userName: { type: String, required: true, unique: true },
+      bio: {
+        type: String,
+        required: false,
+        maxlength: [200, "Bio should not be more than 200"],
+        default: "",
+      },
+      profile_img: {
+        type: String,
+        required: false,
+      },
     },
-    profileImg: {
-      type: String,
-      required: false,
+    social_links: {
+      youtube: { type: String, default: "" },
+      instagram: { type: String, default: "" },
+      facebook: { type: String, default: "" },
+      twitter: { type: String, default: "" },
+      github: { type: String, default: "" },
+      website: { type: String, default: "" },
     },
-    password: { type: String, required: true },
+    account_info: {
+      totalPosts: { type: Number, default: 0 },
+      totalReads: { type: Number, default: 0 },
+    },
+    google_auth: { type: Boolean, required: false },
+    blogs: { type: [Schema.Types.ObjectId], ref: "blogs", default: [] },
   },
   {
     timestamps: true,
