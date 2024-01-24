@@ -1,27 +1,26 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BlogEditor from "../../../common/components/BlogEditor";
 
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import PublishForm from "../../../common/components/PublishForm";
 import { profileState } from "../../profile/services/profileSlice";
-import { blogEditorState } from "./services/blogEditorSlice";
-import { useState } from "react";
-import { OutputData } from "@editorjs/editorjs";
-
-const initialData: OutputData = {
-  time: new Date().getTime(),
-  blocks: [],
-};
+import { blogEditorState, clearBlogData } from "./services/blogEditorSlice";
+import { useEffect } from "react";
 
 const AddStory = () => {
   const profileData = useSelector(profileState).profile.personal_info;
   const isEditorState = useSelector(blogEditorState).isEditorState;
-  const [editorData, setEditorData] = useState(initialData);
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearBlogData());
+  }, [location.pathname]);
 
   return !profileData.id ? (
     <Navigate to={"/login"} />
   ) : isEditorState ? (
-    <BlogEditor editorData={editorData} setEditorData={setEditorData} />
+    <BlogEditor />
   ) : (
     <PublishForm />
   );

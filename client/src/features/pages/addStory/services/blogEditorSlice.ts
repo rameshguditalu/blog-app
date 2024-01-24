@@ -2,21 +2,23 @@ import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../../../app/rootReducer";
 import { BlogType } from "./blogEditorService";
 
+const initialBlogState = {
+  title: "",
+  image: "",
+  content: {
+    time: new Date().getTime(),
+    blocks: [],
+  },
+  tags: [],
+  description: "",
+  author: {},
+};
+
 const initialState: {
   blogState: BlogType;
   isEditorState: boolean;
 } = {
-  blogState: {
-    title: "",
-    image: "",
-    content: {
-      time: new Date().getTime(),
-      blocks: [],
-    },
-    tags: [],
-    description: "",
-    author: {},
-  },
+  blogState: initialBlogState,
   isEditorState: true,
 };
 
@@ -30,10 +32,15 @@ export const blogEditorSlice = createSlice({
     setBlogState: (state, action: PayloadAction<{ blogData: BlogType }>) => {
       state.blogState = { ...state.blogState, ...action.payload.blogData };
     },
+    clearBlogData: (state) => {
+      state.isEditorState = true;
+      state.blogState = initialBlogState;
+    },
   },
 });
 
-export const { setIsEditorState, setBlogState } = blogEditorSlice.actions;
+export const { setIsEditorState, setBlogState, clearBlogData } =
+  blogEditorSlice.actions;
 
 export const blogEditorReducer = blogEditorSlice.reducer;
 export const blogEditorState = (state: RootState): RootState["blogEditor"] =>

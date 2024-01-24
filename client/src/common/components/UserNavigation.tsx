@@ -10,7 +10,7 @@ import { AppRoutePaths } from "../model/route.model";
 const UserNavigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const profile = useSelector(profileState).profile;
+  const profile = useSelector(profileState).profile.personal_info;
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");

@@ -7,14 +7,20 @@ import {
 } from "../../features/pages/addStory/services/blogEditorSlice";
 import Tag from "./Tag";
 import toast from "react-hot-toast";
+import { createBlog } from "../../features/pages/addStory/services/blogEditorService";
+import { useNavigate } from "react-router-dom";
+import { profileState } from "../../features/profile/services/profileSlice";
 
 let charactersLimit = 200;
 let tagLimit = 10;
 
 const PublishForm = () => {
   const blogData = useSelector(blogEditorState).blogState;
-  const { title, description, image, tags } = blogData;
+  const authToken = useSelector(profileState).authToken;
+  const { title, description, image, tags, content } = blogData;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleClose = () => {
     dispatch(setIsEditorState({ value: true }));
   };
@@ -60,7 +66,38 @@ const PublishForm = () => {
     }
   };
 
-  const handlePublish = () => {};
+  const handlePublish = (e: any) => {
+    if (e.target.className.includes("disable")) {
+      return;
+    }
+    if (!blogData.title.length)
+      return toast.error("Write blog title to publish it");
+    if (
+      !blogData.description.length ||
+      blogData.description.length > charactersLimit
+    )
+      return toast.error(
+        `Write a description about your blog within ${charactersLimit} character to publish it`
+      );
+    if (!tags.length)
+      return toast.error("Enter atleast 1 tag to help us rank your blog");
+    e.target.classList.add("disable");
+    let loadingToast = toast.loading("Publishing...");
+    let blogObj = { title, image, content, tags, description, draft: false };
+    createBlog(blogObj, authToken)
+      .then(() => {
+        e.target.classList.removes("disable");
+        toast.dismiss(loadingToast);
+        toast.success("Blog Created Successfully");
+        navigate("/home");
+      })
+      .catch((err) => {
+        toast.dismiss(loadingToast);
+        if (!err?.message)
+          toast.error("Something Went Wrong! Please try after sometime");
+        else toast.error(err.message);
+      });
+  };
 
   return (
     <AnimationWrapper>
@@ -74,7 +111,7 @@ const PublishForm = () => {
         <div className="max-w-[550px] center ">
           <p className="text-dark-grey mb-1">Preview</p>
           <div className="w-full aspect-video rounded-lg overflow-hidden bg-grey mt-4">
-            <img src={image} alt="" />
+            <img src={image} alt="Image" />
           </div>
           <h1 className="text-4xl font-medium mt-2 leading-tight line-clamp-1">
             {title}
@@ -89,7 +126,6 @@ const PublishForm = () => {
             className="input-box pl-4 "
             type="text"
             placeholder="Blog Title"
-            defaultValue={title}
             value={title}
             onChange={handleTitle}
           />
@@ -98,7 +134,7 @@ const PublishForm = () => {
           </p>
           <textarea
             maxLength={charactersLimit}
-            defaultValue={description}
+            value={description}
             className="h-40 resize-none leading-7 input-box pl-4"
             onChange={handleDescription}
             onKeyDown={handleTitleKeyDown}

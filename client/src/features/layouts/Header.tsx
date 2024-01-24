@@ -11,11 +11,13 @@ import {
   setIsEditorState,
 } from "../pages/addStory/services/blogEditorSlice";
 import toast from "react-hot-toast";
+import { createBlog } from "../pages/addStory/services/blogEditorService";
 
 const Header = () => {
   const authToken = useSelector(profileState).authToken;
   const editorData = useSelector(blogEditorState).blogState;
   const isEditorState = useSelector(blogEditorState).isEditorState;
+  const { title, image, content, description, tags } = editorData;
 
   const dispatch = useDispatch();
   const profileData = useSelector(profileState).profile.personal_info;
@@ -36,6 +38,28 @@ const Header = () => {
     if (!editorData.title.length)
       return toast.error("Write blog title to publish it");
     dispatch(setIsEditorState({ value: false }));
+  };
+
+  const handleSaveDraft = (e: any) => {
+    if (e.target.className.includes("disable")) {
+      return;
+    }
+    if (!editorData.title.length)
+      return toast.error("Write blog title before saving it as a draft");
+
+    let loadingToast = toast.loading("Saving...");
+    let blogObj = { title, image, content, tags, description, draft: true };
+    createBlog(blogObj, authToken)
+      .then(() => {
+        toast.dismiss(loadingToast);
+        toast.success("Saved");
+      })
+      .catch((err) => {
+        toast.dismiss(loadingToast);
+        if (!err?.message)
+          toast.error("Something Went Wrong! Please try after sometime");
+        else toast.error(err.message);
+      });
   };
 
   return (
@@ -80,7 +104,10 @@ const Header = () => {
                 Publish
               </button>
             )}
-            <button className="btn-light hidden md:block py-2">
+            <button
+              className="btn-light hidden md:block py-2"
+              onClick={handleSaveDraft}
+            >
               Save Draft
             </button>
           </>

@@ -1,6 +1,6 @@
 import AnimationWrapper from "./PageAnimation";
 import DefaultBanner from "../../assets/blog banner.png";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { EditorTools } from "../../constants/tools";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,15 +9,16 @@ import {
   setBlogState,
 } from "../../features/pages/addStory/services/blogEditorSlice";
 
-export type props = {
-  editorData: OutputData;
-  setEditorData: (data: OutputData) => void;
+const initialData: OutputData = {
+  time: new Date().getTime(),
+  blocks: [],
 };
 
-const BlogEditor = ({ editorData, setEditorData }: props) => {
+const BlogEditor = () => {
   const blogData = useSelector(blogEditorState).blogState;
   const dispatch = useDispatch();
   const ref = useRef<EditorJS>();
+  const [editorData, setEditorData] = useState(initialData);
 
   const handleUpload = (e: any) => {
     let img = e.target.files[0];
@@ -48,28 +49,25 @@ const BlogEditor = ({ editorData, setEditorData }: props) => {
   useEffect(() => {
     if (!ref.current) {
       const editor = new EditorJS({
-        holderId: "textEditor",
+        holder: "textEditor",
         tools: EditorTools,
         data: editorData,
         placeholder: "Let's write an awesome story",
         async onChange(api) {
           const data = await api.saver.save();
           setEditorData(data);
-          dispatch(
-            setBlogState({
-              blogData: { ...blogData, content: data },
-            })
-          );
         },
       });
-      ref.current = editor;
     }
-    return () => {
-      if (ref.current && ref.current.destroy) {
-        ref.current.destroy();
-      }
-    };
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      setBlogState({
+        blogData: { ...blogData, content: editorData },
+      })
+    );
+  }, [editorData]);
 
   return (
     <>
@@ -91,26 +89,9 @@ const BlogEditor = ({ editorData, setEditorData }: props) => {
                   onChange={handleUpload}
                 />
               </label>
-              <button
-                className="btn-light hidden md:block py-2"
-                onClick={() =>
-                  dispatch(
-                    dispatch(
-                      setBlogState({
-                        blogData: {
-                          ...blogData,
-                          image: "",
-                        },
-                      })
-                    )
-                  )
-                }
-              >
-                Remove Image
-              </button>
             </div>
             <textarea
-              placeholder="Title"
+              placeholder="Title..."
               className="text-4xl font-medium w-full h-20 outline-none resize-none mt-10 leading-tight placeholder:opacity-40"
               onKeyDown={handleTitleKeyDown}
               onChange={handleTitleChange}

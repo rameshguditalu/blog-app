@@ -4,7 +4,12 @@ import {
   setBlogState,
 } from "../../features/pages/addStory/services/blogEditorSlice";
 
-const Tag = ({ tag, key }: { tag: string; key: number }) => {
+type props = {
+  tag: string;
+  key: number;
+};
+
+const Tag = ({ tag, key }: props) => {
   const dispatch = useDispatch();
   const blogData = useSelector(blogEditorState).blogState;
   const { tags } = blogData;
@@ -15,7 +20,10 @@ const Tag = ({ tag, key }: { tag: string; key: number }) => {
   };
 
   return (
-    <div className="relative p-2 mt-2 mr-2 px-5 bg-white rounded-full inline-block hover:bg-opacity-50 pr-10">
+    <div
+      className="relative p-2 mt-2 mr-2 px-5 bg-white rounded-full inline-block hover:bg-opacity-50 pr-10"
+      key={key}
+    >
       <p className="outline-none">{tag}</p>
       <button
         className="mt-[2px]  rounded-full absolute right-3 top-1/2 -translate-y-1/2"
