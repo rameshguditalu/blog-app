@@ -9,8 +9,9 @@ exports.routes = (app) => {
 
   // blog routes
   app.post("/api/blog/create-blog", verifyJWT, blogController.createBlog);
-  app.get("/api/blog/latest-blogs", blogController.latestBlogs);
+  app.post("/api/blog/latest-blogs", blogController.latestBlogs);
   app.get("/api/blog/trending-blogs", blogController.trendingBlogs);
+  app.post("/api/blog/search-blogs", blogController.searchBlogs);
 
   //   app.post("/api/auth/signout", controller.signout);
 };

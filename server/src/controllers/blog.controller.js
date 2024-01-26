@@ -32,7 +32,7 @@ exports.createBlog = async (req, res) => {
         message: "Provide tags in order to publish the blog, Maximum 10",
       });
   }
-
+  tags = tags.map((tag) => tag.toLowerCase());
   let blogId = uuidv4();
   try {
     let newBlog = new Blog({
@@ -74,6 +74,7 @@ exports.createBlog = async (req, res) => {
 };
 
 exports.latestBlogs = async (req, res) => {
+  let { page } = req.body;
   let maxLimit = 5;
   Blog.find({ draft: false })
     .populate(
@@ -82,6 +83,7 @@ exports.latestBlogs = async (req, res) => {
     )
     .sort({ createdAt: -1 })
     .select("blogId title description image activity tags createdAt -_id")
+    .skip((page - 1) * maxLimit)
     .limit(maxLimit)
     .then((blogs) => {
       return res.status(200).json({ success: true, message: "", data: blogs });
@@ -100,6 +102,26 @@ exports.trendingBlogs = async (req, res) => {
     )
     .sort({ "activity.reads": -1, "activity.likes": -1, createdAt: -1 })
     .select("blogId title createdAt -_id")
+    .limit(maxLimit)
+    .then((blogs) => {
+      return res.status(200).json({ success: true, message: "", data: blogs });
+    })
+    .catch((err) => {
+      return res.status(500).json({ success: false, message: err.message });
+    });
+};
+
+exports.searchBlogs = async (req, res) => {
+  let { tag } = req.body;
+  let findQuery = { tags: tag, draft: false };
+  let maxLimit = 5;
+  Blog.find(findQuery)
+    .populate(
+      "author",
+      "personal_info.profile_img personal_info.userName personal_info.fullName -_id"
+    )
+    .sort({ createdAt: -1 })
+    .select("blogId title description image activity tags createdAt -_id")
     .limit(maxLimit)
     .then((blogs) => {
       return res.status(200).json({ success: true, message: "", data: blogs });
