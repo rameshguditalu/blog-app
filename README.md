@@ -13,3 +13,7 @@ This website features include -
 11. Also user can change login password from settings.
 12. Its mobile responsive with modern design + fade in animation on pages.
 And much more.
+
+![localhost_5173_ (2)](https://github.com/rameshguditalu/blog-app/assets/82966243/9733cc4c-ae3b-43a5-8157-78ed1813c5d4)
+![localhost_5173_ (1)](https://github.com/rameshguditalu/blog-app/assets/82966243/7fd6d0bc-29f0-42a6-85e2-3f092c5b7de7)
+![localhost_5173_](https://github.com/rameshguditalu/blog-app/assets/82966243/6e4c8272-c9c8-45ea-8235-ddb93b2f9d0a)
