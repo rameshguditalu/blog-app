@@ -10,7 +10,6 @@ async function verifyJWT(req, res, next) {
       return res
         .status(403)
         .json({ success: false, message: "Access token is invalid" });
-    req.user = user.id;
     next();
   });
 }

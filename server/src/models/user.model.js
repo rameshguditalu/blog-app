@@ -17,6 +17,8 @@ const UserSchema = new Schema(
       profile_img: {
         type: String,
         required: false,
+        default:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSteItzPyeDKBxyWiOA8xrPZXIlxOYv1b1VVg&usqp=CAU",
       },
     },
     social_links: {
