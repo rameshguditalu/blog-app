@@ -1,9 +1,8 @@
 export enum AppRoutePaths {
-  LANDING = "/",
+  HOME = "/",
   NOT_FOUND = "*",
   LOGIN = "/login",
   REGISTER = "/register",
-  NEW_STORY = "/new-story",
-  DASHBOARD_LAYOUT = "/home",
+  NEW_STORY = "/add-story",
   DASHBOARD = "/home/dashboard",
 }

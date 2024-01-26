@@ -9,6 +9,7 @@ const initialState: { profile: UserAccount; authToken: string } = {
       fullName: "",
       email: "",
       userName: "",
+      profileImage: "",
     },
   },
   authToken: "",
@@ -30,14 +31,10 @@ export const profileSlice = createSlice({
       action: PayloadAction<{ profile: UserAccount }>
     ) => {
       if (action.payload.profile.personal_info) {
-        state.profile.personal_info.id =
-          action.payload.profile.personal_info.id;
-        state.profile.personal_info.email =
-          action.payload.profile.personal_info.email;
-        state.profile.personal_info.fullName =
-          action.payload.profile.personal_info.fullName;
-        state.profile.personal_info.userName =
-          action.payload.profile.personal_info.userName;
+        state.profile.personal_info = {
+          ...state.profile.personal_info,
+          ...action.payload.profile.personal_info,
+        };
       }
     },
   },

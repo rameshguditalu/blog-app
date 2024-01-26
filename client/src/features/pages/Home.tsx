@@ -1,76 +1,158 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Card from "../../common/components/Card";
-import Pagination from "../../common/components/Pagination";
-import Skeleton from "../../common/components/Skeleton";
+import { useEffect, useState } from "react";
+import InPageNavigation, {
+  activeTabRef,
+} from "../../common/components/InPageNavigation";
+import AnimationWrapper from "../../common/components/PageAnimation";
+import {
+  LatestBlogs,
+  fetchLatestBlogs,
+  fetchTrendingBlogs,
+} from "./addStory/services/blogEditorService";
+import Loader from "../../common/components/Loader";
+import LatestBlogCard from "../../common/components/LatestBlogCard";
+import TrendingBlogCard from "../../common/components/TrendingBlogCard";
+
+let categories = [
+  "programming",
+  "hollywood",
+  "film making",
+  "social media",
+  "cooking",
+  "tech",
+  "finances",
+  "travel",
+];
 
 const Home = () => {
-  const search = useLocation().search;
-  const searchKey = new URLSearchParams(search).get("search");
-  const [stories, setStories] = useState([""]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
+  const [latestBlogs, setLatestBlogs] = useState<LatestBlogs[]>([]);
+  const [trendingBlogs, setTrendingBlogs] = useState<LatestBlogs[]>([]);
+  const [pageState, setPageState] = useState("home");
 
-  // useEffect(() => {
-  //   const getStories = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const { data } = await axios.get(
-  //         `/story/getAllStories?search=${searchKey || ""}&page=${page}`
-  //       );
+  const loadBlogByCategor = (e: any) => {
+    let category = e.target.innerText.toLowerCase();
+    setLatestBlogs([]);
+    if (pageState === category) {
+      setPageState("home");
+      return;
+    }
+    setPageState(category);
+  };
 
-  //       if (searchKey) {
-  //         navigate({
-  //           pathname: "/",
-  //           search: `?search=${searchKey}${page > 1 ? `&page=${page}` : ""}`,
-  //         });
-  //       } else {
-  //         navigate({
-  //           pathname: "/",
-  //           search: `${page > 1 ? `page=${page}` : ""}`,
-  //         });
-  //       }
-  //       setStories(data.data);
-  //       setPages(data.pages);
+  const getLatestBlogs = () => {
+    if (!latestBlogs.length)
+      fetchLatestBlogs()
+        .then((response) => {
+          setLatestBlogs(response.data);
+        })
+        .catch((err) => console.log(err));
+  };
 
-  //       setLoading(false);
-  //     } catch (error) {
-  //       setLoading(true);
-  //     }
-  //   };
-  //   getStories();
-  // }, [setLoading, search, page, navigate]);
+  const getTrendingBlogs = () => {
+    if (!trendingBlogs.length)
+      fetchTrendingBlogs()
+        .then((response) => {
+          setTrendingBlogs(response.data);
+        })
+        .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
-    setLoading(false);
-    setStories(["", "", "", "", "", "", ""]);
-  }, [searchKey]);
+    activeTabRef.current.click();
+
+    if (pageState == "home") getLatestBlogs();
+    getTrendingBlogs();
+  }, [pageState]);
 
   return (
-    <div className="m-5 ml-12 mr-5">
-      {loading ? (
-        <div>
-          {[...Array(3)].map(() => {
-            return <Skeleton />;
-          })}
+    <AnimationWrapper>
+      <section className="h-cover flex justify-center gap-10">
+        <div className="w-full">
+          <InPageNavigation
+            routes={[pageState, "trending blogs"]}
+            defaultHidden={["trending blogs"]}
+          >
+            <>
+              {!latestBlogs.length ? (
+                <Loader />
+              ) : (
+                latestBlogs.map((blog, i) => {
+                  const authorInfo = blog.author?.personal_info || {};
+                  return (
+                    <AnimationWrapper
+                      transition={{ duration: 1, delay: i * 0.1 }}
+                      key={i}
+                    >
+                      <LatestBlogCard content={blog} author={authorInfo} />
+                    </AnimationWrapper>
+                  );
+                })
+              )}
+            </>
+            <>
+              {!trendingBlogs ? (
+                <Loader />
+              ) : (
+                trendingBlogs.map((blog, i) => {
+                  return (
+                    <AnimationWrapper
+                      transition={{ duration: 1, delay: i * 0.1 }}
+                      key={i}
+                    >
+                      <TrendingBlogCard blog={blog} index={i} />
+                    </AnimationWrapper>
+                  );
+                })
+              )}
+            </>
+          </InPageNavigation>
         </div>
-      ) : (
-        <>
-          <div className=" min-w-44 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {stories.slice(0, 6).map(() => {
-              return <Card />;
-            })}
+        <div className="min-2-[40%] lg:min-w-[400px] max-w-min border-l border-grey pl-8 pt-3 max-md:hidden">
+          <div className="flex flex-col gap-10">
+            <div>
+              <h1 className="font-medium text-xl mb-8">
+                Stories from all interests
+              </h1>
+              <div className="flex gap-3 flex-wrap ">
+                {categories.map((category, i) => {
+                  return (
+                    <button
+                      key={i}
+                      className={
+                        "tag" +
+                        (pageState == category ? " bg-black text-white" : " ")
+                      }
+                      onClick={loadBlogByCategor}
+                    >
+                      {category}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <h1 className="font-medium text-xl mb-8">
+                Trending <i className="fi fi-rr-arrow-trend-up"></i>
+              </h1>
+              {!trendingBlogs ? (
+                <Loader />
+              ) : (
+                trendingBlogs.map((blog, i) => {
+                  return (
+                    <AnimationWrapper
+                      transition={{ duration: 1, delay: i * 0.1 }}
+                      key={i}
+                    >
+                      <TrendingBlogCard blog={blog} index={i} />
+                    </AnimationWrapper>
+                  );
+                })
+              )}
+            </div>
           </div>
-          <div className="flex justify-center mt-10">
-            {stories.length > 6 && <Pagination />}
-          </div>
-        </>
-      )}
-    </div>
+        </div>
+      </section>
+    </AnimationWrapper>
   );
 };
 

@@ -10,11 +10,13 @@ import toast from "react-hot-toast";
 import { createBlog } from "../../features/pages/addStory/services/blogEditorService";
 import { useNavigate } from "react-router-dom";
 import { profileState } from "../../features/profile/services/profileSlice";
+import { AppRoutePaths } from "../model/route.model";
 
 let charactersLimit = 200;
 let tagLimit = 10;
 
 const PublishForm = () => {
+  const profileData = useSelector(profileState).profile.personal_info;
   const blogData = useSelector(blogEditorState).blogState;
   const authToken = useSelector(profileState).authToken;
   const { title, description, image, tags, content } = blogData;
@@ -81,22 +83,21 @@ const PublishForm = () => {
       );
     if (!tags.length)
       return toast.error("Enter atleast 1 tag to help us rank your blog");
-    e.target.classList.add("disable");
     let loadingToast = toast.loading("Publishing...");
     let blogObj = { title, image, content, tags, description, draft: false };
-    createBlog(blogObj, authToken)
-      .then(() => {
-        e.target.classList.removes("disable");
-        toast.dismiss(loadingToast);
-        toast.success("Blog Created Successfully");
-        navigate("/home");
-      })
-      .catch((err) => {
-        toast.dismiss(loadingToast);
-        if (!err?.message)
-          toast.error("Something Went Wrong! Please try after sometime");
-        else toast.error(err.message);
-      });
+    if (profileData.id)
+      createBlog(blogObj, authToken, profileData.id)
+        .then(() => {
+          toast.dismiss(loadingToast);
+          toast.success("Blog Created Successfully");
+          navigate(AppRoutePaths.HOME);
+        })
+        .catch((err) => {
+          toast.dismiss(loadingToast);
+          if (!err?.message)
+            toast.error("Something Went Wrong! Please try after sometime");
+          else toast.error(err.message);
+        });
   };
 
   return (

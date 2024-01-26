@@ -13,6 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { authWithGoogle } from "./firebase";
 import axios from "axios";
+import { AppRoutePaths } from "../../common/model/route.model";
 
 const Login = () => {
   const authToken = useSelector(profileState).authToken;
@@ -46,7 +47,7 @@ const Login = () => {
           toast.success(res.message);
           dispatch(setAuthToken({ value: res.authToken }));
           dispatch(setActiveProfile({ profile: res.data }));
-          navigate("/home");
+          navigate(AppRoutePaths.HOME);
         } else toast.error(res.message);
       })
       .catch((err) => {

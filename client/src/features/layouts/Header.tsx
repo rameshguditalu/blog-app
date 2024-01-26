@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Logo from "../../assets/blog-logo.png";
+import BlogLogo from "../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { profileState } from "../profile/services/profileSlice";
-import ProfileIcon from "../../assets/user.png";
+import ProfileIcon from "../../assets/ProfileImg.jpg";
 import UserNavigation from "../../common/components/UserNavigation";
 import { AppRoutePaths } from "../../common/model/route.model";
 import {
@@ -48,24 +48,32 @@ const Header = () => {
       return toast.error("Write blog title before saving it as a draft");
 
     let loadingToast = toast.loading("Saving...");
-    let blogObj = { title, image, content, tags, description, draft: true };
-    createBlog(blogObj, authToken)
-      .then(() => {
-        toast.dismiss(loadingToast);
-        toast.success("Saved");
-      })
-      .catch((err) => {
-        toast.dismiss(loadingToast);
-        if (!err?.message)
-          toast.error("Something Went Wrong! Please try after sometime");
-        else toast.error(err.message);
-      });
+    let blogObj = {
+      title,
+      image,
+      content,
+      tags,
+      description,
+      draft: true,
+    };
+    if (profileData.id)
+      createBlog(blogObj, authToken, profileData.id)
+        .then(() => {
+          toast.dismiss(loadingToast);
+          toast.success("Saved");
+        })
+        .catch((err) => {
+          toast.dismiss(loadingToast);
+          if (!err?.message)
+            toast.error("Something Went Wrong! Please try after sometime");
+          else toast.error(err.message);
+        });
   };
 
   return (
     <nav className="navbar">
-      <Link to="/" className="flex-none w-10">
-        <img src={Logo} alt="Blogger Logo" />
+      <Link to={AppRoutePaths.HOME} className="flex-none w-10">
+        <img src={BlogLogo} alt="Blogger Logo" />
       </Link>
       <div
         className={
@@ -125,16 +133,16 @@ const Header = () => {
               onClick={() => setUserNav((curr) => !curr)}
               onBlur={handleBlur}
             >
-              <button className="w-12 h-12 mt-1">
-                {profileData.profileImage ? (
-                  <img
-                    src={ProfileIcon}
-                    className="w-8 h-8 object-cover rounded-full"
-                    alt="profile"
-                  />
-                ) : (
-                  <i className="fi fi-sr-user text-2xl block mt-1"></i>
-                )}
+              <button className="w-12 h-12 rounded-full mt-1">
+                <img
+                  src={
+                    !profileData.profileImage?.length
+                      ? ProfileIcon
+                      : profileData.profileImage
+                  }
+                  className="w-full h-full object-cover rounded-full"
+                  alt="profile"
+                />
               </button>
               {userNav ? <UserNavigation /> : ""}
             </div>
