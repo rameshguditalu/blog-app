@@ -95,10 +95,10 @@ export function createBlog(
   });
 }
 
-export function fetchLatestBlogs(): Promise<AxiosResponse> {
+export function fetchLatestBlogs(page: number): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .get("http://localhost:8080/api/blog/latest-blogs")
+      .post("http://localhost:8080/api/blog/latest-blogs", { page })
       .then((response) => {
         resolve(response.data);
       })
@@ -110,6 +110,17 @@ export function fetchTrendingBlogs(): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
       .get("http://localhost:8080/api/blog/trending-blogs")
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+export function fetchCategoryBlogs(pageState: string): Promise<AxiosResponse> {
+  return new Promise((resolve, reject) => {
+    axios
+      .post("http://localhost:8080/api/blog/search-blogs", { tag: pageState })
       .then((response) => {
         resolve(response.data);
       })

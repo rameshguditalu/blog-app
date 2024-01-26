@@ -5,12 +5,15 @@ import InPageNavigation, {
 import AnimationWrapper from "../../common/components/PageAnimation";
 import {
   LatestBlogs,
+  fetchCategoryBlogs,
   fetchLatestBlogs,
   fetchTrendingBlogs,
 } from "./addStory/services/blogEditorService";
 import Loader from "../../common/components/Loader";
 import LatestBlogCard from "../../common/components/LatestBlogCard";
 import TrendingBlogCard from "../../common/components/TrendingBlogCard";
+import NoDataMessage from "../../common/components/NoDataMessage";
+import { filterPaginationData } from "../../common/helpers/helpers";
 
 let categories = [
   "programming",
@@ -24,13 +27,13 @@ let categories = [
 ];
 
 const Home = () => {
-  const [latestBlogs, setLatestBlogs] = useState<LatestBlogs[]>([]);
-  const [trendingBlogs, setTrendingBlogs] = useState<LatestBlogs[]>([]);
+  const [latestBlogs, setLatestBlogs] = useState<LatestBlogs[]>();
+  const [trendingBlogs, setTrendingBlogs] = useState<LatestBlogs[]>();
   const [pageState, setPageState] = useState("home");
 
   const loadBlogByCategor = (e: any) => {
     let category = e.target.innerText.toLowerCase();
-    setLatestBlogs([]);
+    setLatestBlogs(undefined);
     if (pageState === category) {
       setPageState("home");
       return;
@@ -38,28 +41,40 @@ const Home = () => {
     setPageState(category);
   };
 
-  const getLatestBlogs = () => {
-    if (!latestBlogs.length)
-      fetchLatestBlogs()
-        .then((response) => {
-          setLatestBlogs(response.data);
-        })
-        .catch((err) => console.log(err));
+  const getLatestBlogs = (page = 1) => {
+    fetchLatestBlogs(page)
+      .then((response) => {
+        // let formateData = filterPaginationData({
+        //   state: latestBlogs,
+        //   data: response.data,
+        //   page,
+        //   countRoute: "/all-latest-blogs-count",
+        // });
+        setLatestBlogs(response.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const getTrendingBlogs = () => {
-    if (!trendingBlogs.length)
-      fetchTrendingBlogs()
-        .then((response) => {
-          setTrendingBlogs(response.data);
-        })
-        .catch((err) => console.log(err));
+    fetchTrendingBlogs()
+      .then((response) => {
+        setTrendingBlogs(response.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const fetchBlogsByCategory = () => {
+    fetchCategoryBlogs(pageState)
+      .then((response) => {
+        setLatestBlogs(response.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     activeTabRef.current.click();
-
     if (pageState == "home") getLatestBlogs();
+    else fetchBlogsByCategory();
     getTrendingBlogs();
   }, [pageState]);
 
@@ -72,9 +87,9 @@ const Home = () => {
             defaultHidden={["trending blogs"]}
           >
             <>
-              {!latestBlogs.length ? (
+              {!latestBlogs ? (
                 <Loader />
-              ) : (
+              ) : latestBlogs.length ? (
                 latestBlogs.map((blog, i) => {
                   const authorInfo = blog.author?.personal_info || {};
                   return (
@@ -86,12 +101,14 @@ const Home = () => {
                     </AnimationWrapper>
                   );
                 })
+              ) : (
+                <NoDataMessage message="Sorry there is no matching data to display" />
               )}
             </>
             <>
               {!trendingBlogs ? (
                 <Loader />
-              ) : (
+              ) : trendingBlogs.length ? (
                 trendingBlogs.map((blog, i) => {
                   return (
                     <AnimationWrapper
@@ -102,6 +119,8 @@ const Home = () => {
                     </AnimationWrapper>
                   );
                 })
+              ) : (
+                <NoDataMessage message="Sorry there is no matching data to display" />
               )}
             </>
           </InPageNavigation>
@@ -136,7 +155,7 @@ const Home = () => {
               </h1>
               {!trendingBlogs ? (
                 <Loader />
-              ) : (
+              ) : trendingBlogs.length ? (
                 trendingBlogs.map((blog, i) => {
                   return (
                     <AnimationWrapper
@@ -147,6 +166,8 @@ const Home = () => {
                     </AnimationWrapper>
                   );
                 })
+              ) : (
+                <NoDataMessage message="Sorry there is no matching data to display" />
               )}
             </div>
           </div>
