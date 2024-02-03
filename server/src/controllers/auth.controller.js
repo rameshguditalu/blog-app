@@ -20,7 +20,6 @@ exports.signup = async (req, res) => {
         email: email,
         userName: userName,
         password: bcrypt.hashSync(password, 8),
-        image,
       },
     });
     return res.status(200).send({
@@ -32,7 +31,6 @@ exports.signup = async (req, res) => {
           fullName: newUser.personal_info.fullName,
           email: newUser.personal_info.email,
           userName: newUser.personal_info.userName,
-          image,
         },
       },
     });

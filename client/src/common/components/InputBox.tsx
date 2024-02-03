@@ -22,7 +22,7 @@ const InputBox = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
-    <div className="relative w-[100%] mb-4">
+    <div className="relative w-[100%] mb-4 mt-1">
       <input
         id={id}
         type={type == "password" && isPasswordVisible ? "text" : type}

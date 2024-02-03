@@ -72,10 +72,11 @@ const Login = () => {
   return (
     <AnimationWrapper keyValue={"Login"}>
       <section className="h-cover flex items-center justify-center">
-        <form className="w-[80%] max-w-[400px]">
-          <h1 className="text-4xl font-gelasio capitalize text-center mb-14">
-            Welcome back
+        <form className="w-[80%] max-w-[450px] border-2 border-grey p-12 rounded-2xl mt-10">
+          <h1 className="text-3xl font-gelasio text-left mb-6 font-semibold">
+            Log in
           </h1>
+          <label className="text-xl font-medium">Email</label>
           <InputBox
             name="email"
             type="email"
@@ -84,6 +85,7 @@ const Login = () => {
             handleChange={handlChange}
             icon="fi-sr-envelope"
           />
+          <label className="text-xl font-medium">Password</label>
           <InputBox
             name="password"
             type="password"
@@ -93,7 +95,7 @@ const Login = () => {
             icon="fi-sr-lock"
           />
           <button className="btn-dark center mt-5" onClick={handleSubmit}>
-            Sign In
+            Log in
           </button>
           <div className="relative w-full flex items-center gap-2 my-5 opacity-10 uppercase text-black font-bold">
             <hr className="w-1/2 border-black" />

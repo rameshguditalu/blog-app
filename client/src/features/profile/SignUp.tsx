@@ -43,10 +43,11 @@ const SignUp = () => {
   return (
     <AnimationWrapper keyValue={"Register"}>
       <section className="h-cover flex items-center justify-center">
-        <form className="w-[80%] max-w-[400px]">
-          <h1 className="text-4xl font-gelasio capitalize text-center mb-14">
-            Join us today
+        <form className="w-[80%] max-w-[450px] border-2 border-grey p-12 rounded-2xl mt-10">
+          <h1 className="text-3xl font-gelasio text-left mb-6 font-semibold">
+            Sign up
           </h1>
+          <label className="text-xl font-medium">Full Name</label>
           <InputBox
             name="fullName"
             type="text"
@@ -55,6 +56,7 @@ const SignUp = () => {
             handleChange={handlChange}
             icon="fi-sr-user"
           />
+          <label className="text-xl font-medium">Email</label>
           <InputBox
             name="email"
             type="email"
@@ -63,6 +65,7 @@ const SignUp = () => {
             handleChange={handlChange}
             icon="fi-sr-envelope"
           />
+          <label className="text-xl font-medium">Password</label>
           <InputBox
             name="password"
             type="password"
@@ -86,7 +89,7 @@ const SignUp = () => {
           <p className="mt-2 text-dark-grey text-l text-center">
             Already have an account ?
             <Link to="/login" className="underline text-black text-l ml-1">
-              Sign in here.
+              Log in here.
             </Link>
           </p>
         </form>
