@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script type="module" src="http://localhost:5173/@vite/client"></script>
   <script type="module">
     import RefreshRuntime from 'http://localhost:5173/@react-refresh'
     RefreshRuntime.injectIntoGlobalHook(window)
@@ -13,13 +14,12 @@
     window.__vite_plugin_react_preamble_installed__ = true
   </script>
   <!-- if development -->
-  <script type="module" src="http://localhost:5173/@vite/client"></script>
   <title>Blogger</title>
 </head>
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="http://localhost:5173/main.jsx"></script>
 </body>
 
 </html>
