@@ -62,7 +62,10 @@ const Login = () => {
     e.preventDefault();
     authWithGoogle()
       .then((user) =>
-        axios.post("http://localhost:8080/api/user/google-auth", { authToken })
+        axios.post(
+          "https://blogger-app-etm5.onrender.com/api/user/google-auth",
+          { authToken }
+        )
       )
       .catch(() =>
         toast.error("Trouble login through google. Please try after sometime")

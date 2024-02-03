@@ -21,7 +21,7 @@ export type AxiosResponse = {
 export function registerUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("http://localhost:8080/api/user/register", {
+      .post("https://blogger-app-etm5.onrender.com/api/user/register", {
         email: formData.personal_info.email,
         fullName: formData.personal_info.fullName,
         password: formData.personal_info.password,
@@ -36,7 +36,7 @@ export function registerUser(formData: UserAccount): Promise<AxiosResponse> {
 export function loginUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("http://localhost:8080/api/user/login", {
+      .post("https://blogger-app-etm5.onrender.com/api/user/login", {
         email: formData.personal_info.email,
         password: formData.personal_info.password,
       })

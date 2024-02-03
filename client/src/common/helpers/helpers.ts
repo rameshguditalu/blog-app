@@ -44,7 +44,10 @@ export const filterPaginationData = async ({
     obj = { ...state, results: [...state.results, ...data], page: page };
   } else {
     await axios
-      .post(`http://localhost:8080/api/blog/${countRoute}`, data_to_send)
+      .post(
+        `https://blogger-app-etm5.onrender.com/api/blog/${countRoute}`,
+        data_to_send
+      )
       .then(({ data: { totalDocs } }) => {
         obj = { results: data, page: 1, totalDocs };
       })
