@@ -19,7 +19,6 @@ const Login = () => {
   const authToken = useSelector(profileState).authToken;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UserAccount>({
     personal_info: {
       email: "",
@@ -40,7 +39,6 @@ const Login = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setLoading(true);
     loginUser(formData)
       .then((res) => {
         if (res.success && res.authToken && res.data) {
@@ -54,14 +52,13 @@ const Login = () => {
         if (!err?.message)
           toast.error("Something Went Wrong! Please try after sometime");
         else toast.error(err.message);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   const handleGoogleAuth = (e: any) => {
     e.preventDefault();
     authWithGoogle()
-      .then((user) =>
+      .then(() =>
         axios.post(
           "https://blogger-app-etm5.onrender.com/api/user/google-auth",
           { authToken }

@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<UserAccount>({
     personal_info: {
       fullName: "",
@@ -30,14 +29,12 @@ const SignUp = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setLoading(true);
     registerUser(formData)
       .then((res) => {
         toast.success(res.message);
         navigate("/login");
       })
-      .catch(() => toast.error("Something Went Wrong, please try again later"))
-      .finally(() => setLoading(false));
+      .catch(() => toast.error("Something Went Wrong, please try again later"));
   };
 
   return (

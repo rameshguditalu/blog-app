@@ -58,6 +58,7 @@ const BlogEditor = () => {
           setEditorData(data);
         },
       });
+      ref.current = editor;
     }
   }, []);
 

@@ -12,7 +12,7 @@ const TrendingBlogCard = ({ blog, index }: props) => {
     title,
     blogId: id,
     author: {
-      personal_info: { fullName, userName, profile_img },
+      personal_info: { userName, profile_img },
     },
     createdAt,
   } = blog;

@@ -21,7 +21,7 @@ const LatestBlogCard = ({ content, author }: props) => {
     activity: { likes },
     blogId: id,
   } = content;
-  let { fullName, userName, profile_img } = author;
+  let { userName, profile_img } = author;
 
   return (
     <Link

@@ -13,7 +13,6 @@ import Loader from "../../common/components/Loader";
 import LatestBlogCard from "../../common/components/LatestBlogCard";
 import TrendingBlogCard from "../../common/components/TrendingBlogCard";
 import NoDataMessage from "../../common/components/NoDataMessage";
-import { filterPaginationData } from "../../common/helpers/helpers";
 
 let categories = [
   "programming",
