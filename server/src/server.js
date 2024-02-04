@@ -10,6 +10,16 @@ const serviceAccountKey = require("./config/blog-app-d8259-firebase-adminsdk-lvf
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true }));
+
+app.use(
+  express.static("client/", {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".js")) {
+        res.setHeader("Content-Type", "application/javascript");
+      }
+    },
+  })
+);
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccountKey),
 // });
