@@ -1,4 +1,5 @@
 import axios from "axios";
+import { appConfig } from "../../../common/model/route.model";
 
 export type UserAccount = {
   personal_info: {
@@ -21,7 +22,7 @@ export type AxiosResponse = {
 export function registerUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://blogger-app-etm5.onrender.com/api/user/register", {
+      .post(`${appConfig.REACT_API_BASE_URL}api/user/register`, {
         email: formData.personal_info.email,
         fullName: formData.personal_info.fullName,
         password: formData.personal_info.password,
@@ -36,7 +37,7 @@ export function registerUser(formData: UserAccount): Promise<AxiosResponse> {
 export function loginUser(formData: UserAccount): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://blogger-app-etm5.onrender.com/api/user/login", {
+      .post(`${appConfig.REACT_API_BASE_URL}api/user/login`, {
         email: formData.personal_info.email,
         password: formData.personal_info.password,
       })

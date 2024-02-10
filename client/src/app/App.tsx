@@ -13,6 +13,7 @@ import Footer from "../features/layouts/Footer";
 import AddStory from "../features/pages/addStory/AddStory";
 import { AppRoutePaths } from "../common/model/route.model";
 import Home from "../features/pages/Home";
+import SearchPage from "../common/components/SearchPage";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             <Route index element={<Home />}></Route>
             <Route path={AppRoutePaths.NEW_STORY} element={<AddStory />} />
             <Route path={AppRoutePaths.NOT_FOUND} element={<NotFound />} />
+            <Route path={AppRoutePaths.SEARCH} element={<SearchPage />} />
           </Route>
           <Route path={AppRoutePaths.LOGIN} element={<SignIn />} />
           <Route path={AppRoutePaths.REGISTER} element={<SignUp />} />
@@ -38,7 +40,7 @@ const LayoutsWithHeader = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen overflow-auto">
+      <div className="min-h-screen overflow-auto mb-6">
         <Outlet />
       </div>
       <Footer />

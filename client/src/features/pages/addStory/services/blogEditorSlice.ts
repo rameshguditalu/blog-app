@@ -1,6 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../../../app/rootReducer";
-import { BlogType } from "./blogEditorService";
+import { BlogType, LatestBlogs } from "./blogEditorService";
 
 const initialBlogState = {
   title: "",
@@ -17,9 +17,11 @@ const initialBlogState = {
 const initialState: {
   blogState: BlogType;
   isEditorState: boolean;
+  latestBlogs: LatestBlogs[] | undefined;
 } = {
   blogState: initialBlogState,
   isEditorState: true,
+  latestBlogs: undefined,
 };
 
 export const blogEditorSlice = createSlice({
@@ -36,10 +38,16 @@ export const blogEditorSlice = createSlice({
       state.isEditorState = true;
       state.blogState = initialBlogState;
     },
+    setLatestBlogs: (
+      state,
+      action: PayloadAction<{ value: LatestBlogs[] | undefined }>
+    ) => {
+      state.latestBlogs = action.payload.value;
+    },
   },
 });
 
-export const { setIsEditorState, setBlogState, clearBlogData } =
+export const { setIsEditorState, setBlogState, clearBlogData, setLatestBlogs } =
   blogEditorSlice.actions;
 
 export const blogEditorReducer = blogEditorSlice.reducer;

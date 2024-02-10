@@ -1,4 +1,5 @@
 import axios from "axios";
+import { appConfig } from "../model/route.model";
 
 let months = [
   "Jan",
@@ -45,7 +46,7 @@ export const filterPaginationData = async ({
   } else {
     await axios
       .post(
-        `https://blogger-app-etm5.onrender.com/api/blog/${countRoute}`,
+        `${appConfig.REACT_API_BASE_URL}api/blog/${countRoute}`,
         data_to_send
       )
       .then(({ data: { totalDocs } }) => {

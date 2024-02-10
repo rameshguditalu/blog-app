@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { authWithGoogle } from "./firebase";
 import axios from "axios";
-import { AppRoutePaths } from "../../common/model/route.model";
+import { AppRoutePaths, appConfig } from "../../common/model/route.model";
 
 const Login = () => {
   const authToken = useSelector(profileState).authToken;
@@ -59,10 +59,9 @@ const Login = () => {
     e.preventDefault();
     authWithGoogle()
       .then(() =>
-        axios.post(
-          "https://blogger-app-etm5.onrender.com/api/user/google-auth",
-          { authToken }
-        )
+        axios.post(`${appConfig.REACT_API_BASE_URL}api/user/google-auth`, {
+          authToken,
+        })
       )
       .catch(() =>
         toast.error("Trouble login through google. Please try after sometime")

@@ -1,5 +1,6 @@
 import { OutputData } from "@editorjs/editorjs";
 import axios from "axios";
+import { appConfig } from "../../../../common/model/route.model";
 
 export type BlogType = {
   title: string;
@@ -84,7 +85,7 @@ export function createBlog(
 
     axios
       .post(
-        "https://blogger-app-etm5.onrender.com/api/blog/create-blog",
+        `${appConfig.REACT_API_BASE_URL}api/blog/create-blog`,
         blogObj,
         requestConfig
       )
@@ -98,7 +99,7 @@ export function createBlog(
 export function fetchLatestBlogs(page: number): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://blogger-app-etm5.onrender.com/api/blog/latest-blogs", {
+      .post(`${appConfig.REACT_API_BASE_URL}api/blog/latest-blogs`, {
         page,
       })
       .then((response) => {
@@ -111,7 +112,7 @@ export function fetchLatestBlogs(page: number): Promise<AxiosResponse> {
 export function fetchTrendingBlogs(): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://blogger-app-etm5.onrender.com/api/blog/trending-blogs")
+      .get(`${appConfig.REACT_API_BASE_URL}api/blog/trending-blogs`)
       .then((response) => {
         resolve(response.data);
       })
@@ -122,8 +123,9 @@ export function fetchTrendingBlogs(): Promise<AxiosResponse> {
 export function fetchCategoryBlogs(pageState: string): Promise<AxiosResponse> {
   return new Promise((resolve, reject) => {
     axios
-      .post("https://blogger-app-etm5.onrender.com/api/blog/search-blogs", {
+      .post(`${appConfig.REACT_API_BASE_URL}api/blog/search-blogs`, {
         tag: pageState,
+        page: 1,
       })
       .then((response) => {
         resolve(response.data);

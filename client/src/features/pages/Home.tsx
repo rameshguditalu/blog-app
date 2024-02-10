@@ -13,6 +13,11 @@ import Loader from "../../common/components/Loader";
 import LatestBlogCard from "../../common/components/LatestBlogCard";
 import TrendingBlogCard from "../../common/components/TrendingBlogCard";
 import NoDataMessage from "../../common/components/NoDataMessage";
+import {
+  blogEditorState,
+  setLatestBlogs,
+} from "./addStory/services/blogEditorSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 let categories = [
   "programming",
@@ -26,13 +31,15 @@ let categories = [
 ];
 
 const Home = () => {
-  const [latestBlogs, setLatestBlogs] = useState<LatestBlogs[]>();
   const [trendingBlogs, setTrendingBlogs] = useState<LatestBlogs[]>();
+  const latestBlogs = useSelector(blogEditorState).latestBlogs;
   const [pageState, setPageState] = useState("home");
+  const dispatch = useDispatch();
 
   const loadBlogByCategor = (e: any) => {
     let category = e.target.innerText.toLowerCase();
-    setLatestBlogs(undefined);
+
+    dispatch(setLatestBlogs({ value: undefined }));
     if (pageState === category) {
       setPageState("home");
       return;
@@ -49,7 +56,7 @@ const Home = () => {
         //   page,
         //   countRoute: "/all-latest-blogs-count",
         // });
-        setLatestBlogs(response.data);
+        dispatch(setLatestBlogs({ value: response.data }));
       })
       .catch((err) => console.log(err));
   };
@@ -65,7 +72,7 @@ const Home = () => {
   const fetchBlogsByCategory = () => {
     fetchCategoryBlogs(pageState)
       .then((response) => {
-        setLatestBlogs(response.data);
+        dispatch(setLatestBlogs({ value: response.data }));
       })
       .catch((err) => console.log(err));
   };

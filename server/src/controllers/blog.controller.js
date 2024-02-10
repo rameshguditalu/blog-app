@@ -2,6 +2,8 @@ const Blog = require("../models/blog.model");
 const { v4: uuidv4 } = require("uuid");
 const User = require("../models/user.model");
 
+let maxLimit = 5;
+
 exports.createBlog = async (req, res) => {
   let authorId = req.query.p1;
   let { title, description, image, tags, content, draft } = req.body;
@@ -75,7 +77,7 @@ exports.createBlog = async (req, res) => {
 
 exports.latestBlogs = async (req, res) => {
   let { page } = req.body;
-  let maxLimit = 5;
+
   Blog.find({ draft: false })
     .populate(
       "author",
@@ -94,7 +96,6 @@ exports.latestBlogs = async (req, res) => {
 };
 
 exports.trendingBlogs = async (req, res) => {
-  let maxLimit = 5;
   Blog.find({ draft: false })
     .populate(
       "author",
@@ -112,9 +113,9 @@ exports.trendingBlogs = async (req, res) => {
 };
 
 exports.searchBlogs = async (req, res) => {
-  let { tag } = req.body;
+  let { tag, page } = req.body;
   let findQuery = { tags: tag, draft: false };
-  let maxLimit = 5;
+
   Blog.find(findQuery)
     .populate(
       "author",
@@ -122,6 +123,7 @@ exports.searchBlogs = async (req, res) => {
     )
     .sort({ createdAt: -1 })
     .select("blogId title description image activity tags createdAt -_id")
+    .skip((page - 1) * maxLimit)
     .limit(maxLimit)
     .then((blogs) => {
       return res.status(200).json({ success: true, message: "", data: blogs });
