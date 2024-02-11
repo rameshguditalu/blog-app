@@ -24,8 +24,8 @@ const App = () => {
           <Route path={AppRoutePaths.HOME} element={<LayoutsWithHeader />}>
             <Route index element={<Home />}></Route>
             <Route path={AppRoutePaths.NEW_STORY} element={<AddStory />} />
-            <Route path={AppRoutePaths.NOT_FOUND} element={<NotFound />} />
             <Route path={AppRoutePaths.SEARCH} element={<SearchPage />} />
+            <Route path={AppRoutePaths.NOT_FOUND} element={<NotFound />} />
           </Route>
           <Route path={AppRoutePaths.LOGIN} element={<SignIn />} />
           <Route path={AppRoutePaths.REGISTER} element={<SignUp />} />

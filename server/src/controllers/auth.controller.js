@@ -84,6 +84,23 @@ exports.signin = async (req, res) => {
   }
 };
 
+exports.searchUsers = async (req, res) => {
+  let { query } = req.body;
+  User.find({ "personal_info.userName": new RegExp(query, "i") })
+    .limit(50)
+    .select(
+      "personal_info.fullName personal_info.userName personal_info.profile_img -_id"
+    )
+    .then((users) => {
+      return res
+        .status(200)
+        .send({ success: true, message: "Success", data: users });
+    })
+    .catch((err) => {
+      return res.status(500).send({ success: true, message: err.message });
+    });
+};
+
 exports.googleAuth = async (req, res) => {
   let { access_token } = req.body;
   getAuth

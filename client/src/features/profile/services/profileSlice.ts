@@ -9,7 +9,7 @@ const initialState: { profile: UserAccount; authToken: string } = {
       fullName: "",
       email: "",
       userName: "",
-      profileImage: "",
+      profile_img: "",
     },
   },
   authToken: "",

@@ -159,9 +159,9 @@ const Header = () => {
               <button className="w-12 h-12 rounded-full mt-1">
                 <img
                   src={
-                    !profileData.profileImage?.length
+                    !profileData.profile_img?.length
                       ? ProfileIcon
-                      : profileData.profileImage
+                      : profileData.profile_img
                   }
                   className="w-full h-full object-cover rounded-full"
                   alt="profile"

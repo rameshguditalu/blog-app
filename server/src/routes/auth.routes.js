@@ -6,6 +6,7 @@ exports.routes = (app) => {
   app.post("/api/user/register", controller.signup);
   app.post("/api/user/login", controller.signin);
   app.post("/api/user/google-auth", controller.googleAuth);
+  app.post("/api/user/search-users", controller.searchUsers);
 
   // blog routes
   app.post("/api/blog/create-blog", verifyJWT, blogController.createBlog);

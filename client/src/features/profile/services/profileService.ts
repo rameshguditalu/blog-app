@@ -8,7 +8,7 @@ export type UserAccount = {
     userName?: string;
     fullName?: string;
     password?: string;
-    profileImage?: string;
+    profile_img?: string;
   };
 };
 
