@@ -1,5 +1,5 @@
 export enum appConfig {
-  REACT_API_BASE_URL = "http://localhost:8080/",
+  REACT_API_BASE_URL = "https://blogger-app-etm5.onrender.com/",
 }
 
 // https://blogger-app-etm5.onrender.com/
