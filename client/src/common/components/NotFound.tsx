@@ -1,10 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AppRoutePaths } from "../model/route.model";
 import pageNotFoundImage from "../../assets/svg/404.png";
 
 const NotFound = () => {
-  const navigate = useNavigate();
-
   return (
     <section className="h-cover relative p-10 flex flex-col items-center gap-20 text-center">
       <img
